@@ -16,15 +16,13 @@ NASA returns the orbital elements of the satellite. These are propagated to find
 MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Providence Rhode Island. 
 
 <p align="center">
-  <img src="docs/providence-pointing.gif" width="600" alt="Providence pointing"><br>
+  <img src="MATLAB/docs/providence-pointing.gif" width="600" alt="Providence pointing"><br>
   <em>Sensor footprint tracking Providence, 50× real time</em>
 </p>
 
 ## What I did / Explanation
 
 ### Orbit propagation — `Algorithms/propagate_orbital_elements.m`, `Algorithms/test_propagate_orbital_elements.m`
-
-Wrote. 
 - Finds orbital elements of satellite at some future time through solving Kepler's equation with Newton's method. Tested against Aerospace Toolbox functions `propagateOrbit` / `ijk2keplerian` with an eccentricity between 0.05-0.95 with 1 minute steps over a 2 hour arc, accurate to 1e-8 deg. 
 
 ### Geomagnetic field — `Algorithms/magnetosphere.m`
@@ -36,17 +34,14 @@ I integrated it into the Simulink control model with the UKF and pointing (feeds
 
 Multiplicative unscented Kalman filter, 6-state error
 (3 attitude + 3 gyro bias), 13 sigma points, switching between a two-vector
-(sun + magnetometer) and magnetometer-only measurement mode, written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes:
+(sun + magnetometer) and magnetometer-only measurement mode, written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes I did:
 
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy 
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off. 
+- **1 vector model drift with PD** - debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller due to generated w_measured bug
 - **Verified Accuracy with PD controller** - wrote a small script `Error.m` to find rotation error between q_est and q_true; tested MUKF accuracy over 2 hour orbits with 1 vector mode (magnetometer only), 2 vector, nadir vs Providence pointing, and PD controller fed w_estimate vs w_true. Ran 100 simulation Monte Carlo tests with random initial orientations and velocity to test PD settling with MUKF. 
-- **1 vector model drift with PD** - tested and debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller due to generated w_measured bug
-
 
 ### Pointing error — `Algorithms/pointing_error.m`
-
-Wrote.
 - Builds the desired body frame for a ground-station target (Providence,
 RI) from the satellite's ECI position and velocity, converts it to a
 quaternion, and returns the error quaternion in body coordinates.
@@ -61,7 +56,7 @@ Co-developed with @aPizzaRat.
 
 ### Detumbling — `Algorithms/Bdot.m`
 
-Wrote. B-dot control law. Uses finite-differences in the body-frame magnetic field
+Implemented B-dot control law. Uses finite-differences in the body-frame magnetic field
 to command a magnetic dipole opposing the rate of change.
 
 ### Monte Carlo verification — `Simulink/monte_carlo.m`
