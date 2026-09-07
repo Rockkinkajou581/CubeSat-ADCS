@@ -19,6 +19,7 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
   <img src="docs/providence-pointing.gif" width="600" alt="Providence pointing"><br>
   <em>Sensor footprint tracking Providence, 50× real time</em>
 </p>
+
 ## What I did / Explanation
 
 ### Orbit propagation — `Algorithms/propagate_orbital_elements.m`, `Algorithms/test_propagate_orbital_elements.m`
