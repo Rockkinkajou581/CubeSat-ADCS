@@ -58,7 +58,7 @@ summary(r)
 ### Geomagnetic field — [`magnetosphere.m`](MATLAB/Algorithms/magnetosphere.m)
 
 WMM2025 spherical-harmonic field model, originally written by @contextneeded.
-I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function.
+- I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function. 
 
 ### Attitude estimation — [`MUKF.m`](MATLAB/Algorithms/MUKF.m)
 
@@ -86,12 +86,14 @@ Co-developed with @aPizzaRat.
 
 ### Detumbling — [`Bdot.m`](MATLAB/Algorithms/Bdot.m)
 
-Implemented B-dot control law. Uses finite-differences in the body-frame magnetic field
+Implemented B-dot control law
+- Uses finite-differences in the body-frame magnetic field
 to command a magnetic dipole opposing the rate of change.
 
 ### Monte Carlo verification — [`runCubeSatMonteCarlo.m`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3/runCubeSatMonteCarlo.m)
 
-Wrote with Claude. Configurable trial count, stop time, attitude sampling mode (uniform or
+Wrote with Claude. 
+- Configurable trial count, stop time, attitude sampling mode (uniform or
 axis-angle with tilt bounds), rate range, settling tolerance, steady-state
 window, and RNG seed; returns one row per trial and plots the summary.
 Initial conditions are injected with `Simulink.SimulationInput`, so the model on
