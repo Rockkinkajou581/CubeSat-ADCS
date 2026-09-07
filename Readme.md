@@ -28,7 +28,7 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
 ### Geomagnetic field — `Algorithms/magnetosphere.m`
 
 WMM2025 spherical-harmonic field model, originally written by @contextneeded.
-I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function. 
+- I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function. 
 
 ### Attitude estimation — `Algorithms/MUKF.m`
 
@@ -56,12 +56,14 @@ Co-developed with @aPizzaRat.
 
 ### Detumbling — `Algorithms/Bdot.m`
 
-Implemented B-dot control law. Uses finite-differences in the body-frame magnetic field
+Implemented B-dot control law
+- Uses finite-differences in the body-frame magnetic field
 to command a magnetic dipole opposing the rate of change.
 
 ### Monte Carlo verification — `Simulink/monte_carlo.m`
 
-Wrote with Claude. Configurable trial count, stop time, attitude sampling mode (uniform or
+Wrote with Claude. 
+- Configurable trial count, stop time, attitude sampling mode (uniform or
 axis-angle with tilt bounds), rate range, settling tolerance, steady-state
 window, and RNG seed; returns one row per trial and plots the summary.
 
