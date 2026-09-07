@@ -23,7 +23,8 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
 
 ### Orbit propagation — `Algorithms/propagate_orbital_elements.m`, `Algorithms/test_propagate_orbital_elements.m`
 
-Wrote. Finds orbital elements of satellite at some future time through solving Kepler's equation with Newton's method. Tested against Aerospace Toolbox functions `propagateOrbit` / `ijk2keplerian` with an eccentricity between 0.05-0.95 with 1 minute steps over a 2 hour arc, accurate to 1e-8 deg. 
+Wrote. 
+- Finds orbital elements of satellite at some future time through solving Kepler's equation with Newton's method. Tested against Aerospace Toolbox functions `propagateOrbit` / `ijk2keplerian` with an eccentricity between 0.05-0.95 with 1 minute steps over a 2 hour arc, accurate to 1e-8 deg. 
 
 ### Geomagnetic field — `Algorithms/magnetosphere.m`
 
@@ -44,18 +45,18 @@ Multiplicative unscented Kalman filter, 6-state error
 
 ### Pointing error — `Algorithms/pointing_error.m`
 
-Wrote. Builds the desired body frame for a ground-station target (Providence,
+Wrote.
+- Builds the desired body frame for a ground-station target (Providence,
 RI) from the satellite's ECI position and velocity, converts it to a
-quaternion, and returns the error quaternion in body coordinates. Handles quaternion sign flip at 180 degree: the commanded quaternion is compared against the previous timestep's via a persistent variable and sign-flipped when the dot product goes negative, so the target attitude doesn't jump discontinuously
-between equivalent representations. Tested against Aerospace Toolbox nadir-pointing block. Added Providence pointing capability by converting Providence ECEF coordinates to ECI each timestep. 
+quaternion, and returns the error quaternion in body coordinates.
+- Handles quaternion sign flip at 180 degree: the commanded quaternion is compared against the previous timestep's via a persistent variable and sign-flipped when the dot product goes negative, so the target attitude doesn't jump discontinuously between equivalent representations.
+- Tested against Aerospace Toolbox nadir-pointing block. Added Providence pointing capability by converting Providence ECEF coordinates to ECI each timestep. 
 
 ### Pointing control — `Algorithms/PD_controller.m`
 
-Co-developed with @aPizzaRat. Converts the error quaternion and
-body rates to axis-angle, applies proportional and derivative gains per axis,
-scales by the measured inertia tensor, and saturates the commanded torque.
-Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction
-and the rate normalization. 
+Co-developed with @aPizzaRat. 
+- Converts the error quaternion and body rates to axis-angle, applies proportional and derivative gains per axis, scales by the measured inertia tensor, and saturates the commanded torque.
+- Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction and the rate normalization. 
 
 ### Detumbling — `Algorithms/Bdot.m`
 
