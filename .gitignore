@@ -19,3 +19,7 @@ codegen/
 .DS_Store
 ._*
 Thumbs.db
+
+#SDI exports
+results/
+*.mldatx
