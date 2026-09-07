@@ -41,7 +41,7 @@ Multiplicative unscented Kalman filter, 6-state error
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy 
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off. 
 - **Verified Accuracy with PD controller** - wrote a small script `Error.m` to find rotation error between q_est and q_true; tested MUKF accuracy over 2 hour orbits with 1 vector mode (magnetometer only), 2 vector, nadir vs Providence pointing, and PD controller fed w_estimate vs w_true. Ran 100 simulation Monte Carlo tests with random initial orientations and velocity to test PD settling with MUKF. 
-- **1 vector model drift with PD** - tested and debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller
+- **1 vector model drift with PD** - tested and debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller due to generated w_measured bug
 
 
 ### Pointing error — `Algorithms/pointing_error.m`
