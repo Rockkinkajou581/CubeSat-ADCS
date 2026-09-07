@@ -57,14 +57,13 @@ summary(r)
 
 ### Geomagnetic field — [`magnetosphere.m`](MATLAB/Algorithms/magnetosphere.m)
 
-WMM2025 spherical-harmonic field model, originally written by @contextneeded.
-- I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function. 
+WMM2025 spherical-harmonic field model. I integrated it into the Simulink control model with the UKF and pointing (feeds into it the reference ECI vector), debugged Simulink compile issues and NED/ECI bug, and tested it against MATLAB's wrldmagm function. Originally written by @contextneeded.
 
 ### Attitude estimation — [`MUKF.m`](MATLAB/Algorithms/MUKF.m)
 
 Multiplicative unscented Kalman filter, 6-state error
 (3 attitude + 3 gyro bias), 13 sigma points, switching between a two-vector
-(sun + magnetometer) and magnetometer-only measurement mode, written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes I did:
+(sun + magnetometer) and magnetometer-only measurement mode, filter core written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes I did:
 
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off.
@@ -78,11 +77,10 @@ quaternion, and returns the error quaternion in body coordinates.
 - Handles quaternion sign flip at 180 degree: the commanded quaternion is compared against the previous timestep's via a persistent variable and sign-flipped when the dot product goes negative, so the target attitude doesn't jump discontinuously between equivalent representations.
 - Tested against Aerospace Toolbox nadir-pointing block. Added Providence pointing capability by converting Providence ECEF coordinates to ECI each timestep.
 
-### Pointing control — [`PD_controller.m`](MATLAB/Algorithms/PD_controller.m)
-
-Co-developed with @aPizzaRat.
+### PD controller — [`PD_controller.m`](MATLAB/Algorithms/PD_controller.m)
 - Converts the error quaternion and body rates to axis-angle, applies proportional and derivative gains per axis, scales by the measured inertia tensor, and saturates the commanded torque.
-- Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction and the rate normalization.
+- Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction and the rate normalization. Co-developed with @aPizzaRat.
+
 
 ### Detumbling — [`Bdot.m`](MATLAB/Algorithms/Bdot.m)
 
@@ -92,12 +90,11 @@ to command a magnetic dipole opposing the rate of change.
 
 ### Monte Carlo verification — [`runCubeSatMonteCarlo.m`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3/runCubeSatMonteCarlo.m)
 
-Wrote with Claude. 
 - Configurable trial count, stop time, attitude sampling mode (uniform or
 axis-angle with tilt bounds), rate range, settling tolerance, steady-state
 window, and RNG seed; returns one row per trial and plots the summary.
 Initial conditions are injected with `Simulink.SimulationInput`, so the model on
-disk is never modified.
+disk is never modified. Wrote with Claude. 
 
 ## Simulink model
 

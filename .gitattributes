@@ -1,0 +1,8 @@
+# Simulink files are binary. Without this, git may attempt a text
+# merge on an .slx and silently corrupt the model.
+*.slx    binary
+*.mdl    binary
+*.sldd   binary
+*.mldatx binary
+*.slxc   binary
+*.mat    binary
