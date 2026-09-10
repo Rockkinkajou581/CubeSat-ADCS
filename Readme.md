@@ -31,15 +31,21 @@ I ran many simulations in Simulink to test the preformance of the full algorithm
 ### Test conditions
 
 - **Orbit:** 408 km altitude (a = 6 786 233.13 m), 51.6° inclination, 7.1e-5 eccentricity
-- **Inertia:** diag(0.0301, 0.0114, 0.0231) kg·m² — the model uses the full tensor;
-  products of inertia are I_xy = −5.17e-5, I_xz = 2.51e-5, I_yz = −3.65e-3 kg·m²
-- **Sensors:** magnetometer 10 nT (1σ) on a 10 s cadence, photodiodes **not modeled**
+- **Inertia:** 
+```math
+I = \begin{bmatrix}
+0.0301 & -5.17\times10^{-5} & 2.51\times10^{-5} \\
+-5.17\times10^{-5} & 0.0114 & -3.65\times10^{-3} \\
+2.51\times10^{-5} & -3.65\times10^{-3} & 0.0231
+\end{bmatrix}\ \mathrm{kg\,m^2}
+```
+- **Sensors:** magnetometer (σ = 10 nT) on a 10 s cadence, photodiodes **not modeled**
   (the 2-vector mode substitutes a fixed ECI reference vector `[1 0 0]` with 0.01 1σ
   unit-vector noise), gyro 0.057 °/s noise + (0.115, −0.057, 0.086) °/s constant bias,
   sampled at 10 Hz
 - **Actuators:** **ideal torque actuators** — the plant applies the commanded body torque
-  directly, with no magnetorquer dipole model and no saturation limit
-- **Simulation:** ___ s stop time, ___ solver at ___ s step, `Seed = 0`
+  directly, with no magnetorquer dipole model and 5 Nm saturation limit (to be tuned)
+- **Simulation:** 20000s stop time, normal solver, 10 HZ on MUKF, 1 HZ on PD loop 
 
 ### Monte Carlo Validation on PD controller 
 A 100 trial monte carlo simulation ran to 300 s with randommized intital angular velocity and attitude to test PD settling. 
