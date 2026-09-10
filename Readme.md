@@ -45,7 +45,7 @@ I ran many simulations in Simulink to test the preformance of the full algorithm
 A 100 trial monte carlo simulation ran to 300 s with randommized intital angular velocity and attitude to test PD settling. 
 
 <p align="center">
-  <img src="MATALB/docs/monte_carlo.png" width="600" alt="Monte Carlo"><br>
+  <img src="MATLAB/docs/monte_carlo.png" width="600" alt="Monte Carlo"><br>
   <em>Results from 100 trial monte carlo simulation wiht randomized initial conditions to test PD controller settling</em>
 </p>
 
@@ -63,11 +63,11 @@ A 100 trial monte carlo simulation ran to 300 s with randommized intital angular
 Error between estimated quaternion and bias and true quaternion and bias, over 6 hour run in alternating measurement mode
 
 <p align="center">
-  <img src="MATALB/docs/attitude_error.fig" width="600" alt="attitude_error"><br>
+  <img src="MATLAB/docs/attitude_error.fig" width="600" alt="attitude_error"><br>
 </p>
 
 <p align="center">
-  <img src="MATALB/docs/bias_error.fig" width="600" alt="bias_error"><br>
+  <img src="MATLAB/docs/bias_error.fig" width="600" alt="bias_error"><br>
 </p>
 
 
@@ -82,7 +82,7 @@ Error between estimated quaternion and bias and true quaternion and bias, over 6
 Degree of error away from pointing at providence, with the first 300s (settling) excluded
 
 <p align="center">
-  <img src="MATALB/docs/pointing_error.fig" width="600" alt="Pointing_error"><br>
+  <img src="MATLAB/docs/pointing_error.fig" width="600" alt="Pointing_error"><br>
 </p>
 
 | Mode | RMS | 3-sigma | Max |
