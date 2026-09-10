@@ -27,7 +27,6 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
 I ran many simulations in Simulink to test the preformance of the full algorithm. 
 
 
-
 ### Test conditions
 
 - **Orbit:** 408 km altitude (a = 6 786 233.13 m), 51.6° inclination, 7.1e-5 eccentricity
@@ -48,11 +47,11 @@ I = \begin{bmatrix}
 - **Simulation:** 20000s stop time, normal solver, 10 HZ on MUKF, 1 HZ on PD loop 
 
 ### Monte Carlo Validation on PD controller 
-A 100 trial monte carlo simulation ran to 300 s with randommized intital angular velocity and attitude to test PD settling. 
+Ran a 100 trial monte carlo simulation to 300 s with randommized intital angular velocity and attitude to test PD settling. 
 
 <p align="center">
   <img src="MATLAB/docs/monte_carlo.png" width="600" alt="Monte Carlo"><br>
-  <em>Results from 100 trial monte carlo simulation wiht randomized initial conditions to test PD controller settling</em>
+  <em>Results from 100 trial monte carlo simulation</em>
 </p>
 
 | Metric | Value |
@@ -66,14 +65,16 @@ A 100 trial monte carlo simulation ran to 300 s with randommized intital angular
 | Steady-state drift | -3.44×10⁻³ °/s |
 
 ### Attitude accuracy from MUKF
-Error between estimated quaternion and bias and true quaternion and bias, over 6 hour run in alternating measurement mode
+Error (angular error) between q_est and q_true, and error (norm) between bias_est and bias_true, over 6 hour run in alternating measurement mode.. 
 
 <p align="center">
   <img src="MATLAB/docs/attitude_error.png" width="600" alt="attitude_error"><br>
+  <em> Error in degrees of MUKF estimated attitude and true attitude <em>
 </p>
 
 <p align="center">
   <img src="MATLAB/docs/bias_error.png" width="600" alt="bias_error"><br>
+  <em> Error in degree/h of MUKF estimated gyro bias and true gyro bias<em>
 </p>
 
 
@@ -85,7 +86,7 @@ Error between estimated quaternion and bias and true quaternion and bias, over 6
 | Gyro bias | 1-vector | 0.007 °/hr | 0.007 °/hr | 0.012 °/hr |
 
 ### Pointing Error
-Degree of error away from pointing at providence, with the first 300s (settling) excluded
+Degrees of error away from pointing at providence, with the first 300s (settling) excluded. Mission requirment is 10 degrees.
 
 <p align="center">
   <img src="MATLAB/docs/pointing_error.png" width="600" alt="Pointing_error"><br>
