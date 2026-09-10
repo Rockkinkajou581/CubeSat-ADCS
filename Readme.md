@@ -1,8 +1,8 @@
 # ADCS — Attitude Determination and Control
+My work on the attitude determination and control system for PVDX, Brown Space
+Engineering's CubeSat. 
 
-Attitude determination and control system for PVDX CubeSat for Brown Space Engineering.
-
-Upstream team repository: https://github.com/BrownSpaceEngineering/PVDX-ADCS
+This is not the flight repository. Development happens upstream at: https://github.com/BrownSpaceEngineering/PVDX-ADCS and per-file authorship is noted under [What I did](#what-i-did--explanation).
 
 ## Signal chain
 
