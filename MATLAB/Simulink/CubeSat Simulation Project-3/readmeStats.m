@@ -107,7 +107,7 @@ function out = readmeStats(file, runIndex, signalName, opts)
     biasName = firstPresent(["b_error" "MATLAB Function:5"], names);
     out.bias = [];
     if biasName ~= "" && biasName ~= signalName
-        out.bias = attitudeStats(file, SignalName=biasName, Units="deg/hr", ...
+        out.bias = attitudeStats(file, SignalName=biasName, Units="deg/s", ...
                                  SegmentSec=opts.SegmentSec, TStart=opts.TStart, ...
                                  RunIndex=runIndex);
         [tb, yb] = loadRunData(file, biasName, RunIndex=runIndex);
@@ -122,7 +122,7 @@ function out = readmeStats(file, runIndex, signalName, opts)
         else
             fprintf("  converged in       never settles inside 10%% of final\n");
         end
-        printByMode(out.bias, "deg/hr");
+        printByMode(out.bias, "deg/s");
     else
         fprintf("\n  (no bias-error signal in this run - skipping the bias table)\n");
     end
@@ -146,7 +146,7 @@ function [label, units] = describeSignal(name)
 %DESCRIBESIGNAL  Readable title and units for a logged signal name.
     switch char(name)
         case {'b_error', 'MATLAB Function:5'}
-            label = "Gyro bias error";  units = "deg/hr";
+            label = "Gyro bias error";  units = "deg/s";
         case {'deg_error', 'MATLAB Function:2', 'AttitudeError', 'error'}
             label = "Attitude error";   units = "deg";
         otherwise

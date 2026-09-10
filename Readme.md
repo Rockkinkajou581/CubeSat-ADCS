@@ -24,8 +24,7 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
 </p>
 
 ## Performance
-I ran many simulations in Simulink to test the preformance of the full algorithm. 
-
+I ran many simulations in Simulink to test the performance of the full algorithm, achieving 0.77° RMS pointing error with two-vector measurements and 3.6° RMS magnetometer-only, against a ±10° requirement.
 
 ### Test conditions
 
@@ -38,20 +37,22 @@ I = \begin{bmatrix}
 2.51\times10^{-5} & -3.65\times10^{-3} & 0.0231
 \end{bmatrix}\ \mathrm{kg\,m^2}
 ```
-- **Sensors:** magnetometer (σ = 10 nT) on a 10 s cadence, photodiodes **not modeled**
-  (the 2-vector mode substitutes a fixed ECI reference vector `[1 0 0]` with 0.01 1σ
-  unit-vector noise), gyro 0.057 °/s noise + (0.115, −0.057, 0.086) °/s constant bias,
+- **Sensors:** magnetometer (σ = 10 nT) on a 10 s cadence, photodiodes modeled with 
+  a fixed sun ECI position at `[1 0 0]` with 0.01 1σ
+  unit-vector noise, gyro 0.057 °/s noise + (0.115, −0.057, 0.086) °/s constant bias,
   sampled at 10 Hz
 - **Actuators:** **ideal torque actuators** — the plant applies the commanded body torque
-  directly, with no magnetorquer dipole model and 5 Nm saturation limit (to be tuned)
-- **Simulation:** 20000s stop time, normal solver, 10 HZ on MUKF, 1 HZ on PD loop 
+  directly, clipped at ±5 N·m, with no magnetorquer dipole model. Real magnetorquers
+  produce ~10⁻⁵ N·m, so the settling times below reflect controller gains, not
+  achievable slew performance.
+- **Simulation:** 20,000 s (5.6 h) stop time, normal solver, 10 Hz on MUKF, 1 Hz on PD loop
 
 ### Monte Carlo Validation on PD controller 
-Ran a 100 trial monte carlo simulation to 300 s with randommized intital angular velocity and attitude to test PD settling. 
+Ran a 100-trial Monte Carlo simulation to 300 s with randomized initial angular velocity and attitude to test PD settling.
 
 <p align="center">
   <img src="MATLAB/docs/monte_carlo.png" width="600" alt="Monte Carlo"><br>
-  <em>Results from 100 trial monte carlo simulation</em>
+  <em>Results from the 100-trial Monte Carlo simulation</em>
 </p>
 
 | Metric | Value |
@@ -65,36 +66,37 @@ Ran a 100 trial monte carlo simulation to 300 s with randommized intital angular
 | Steady-state drift | -3.44×10⁻³ °/s |
 
 ### Attitude accuracy from MUKF
-Error (angular error) between q_est and q_true, and error (norm) between bias_est and bias_true, over 6 hour run in alternating measurement mode.. 
+Error (angular error) between q_est and q_true, and error (norm) between bias_est and bias_true, over a 20,000 s (5.6 h) run in alternating measurement mode, first 300s included.
 
 <p align="center">
   <img src="MATLAB/docs/attitude_error.png" width="600" alt="attitude_error"><br>
-  <em> Error in degrees of MUKF estimated attitude and true attitude <em>
+  <em> Error in degrees of MUKF estimated attitude and true attitude </em>
 </p>
 
 <p align="center">
   <img src="MATLAB/docs/bias_error.png" width="600" alt="bias_error"><br>
-  <em> Error in degree/h of MUKF estimated gyro bias and true gyro bias<em>
+  <em> Error in °/s of MUKF estimated gyro bias and true gyro bias </em>
 </p>
 
 
 | Value | Mode | RMS error | 3-sigma | max |
 | --- | --- | --- | --- | --- |
-| q_estimate | 2-vector (sun + magnetometer) | 0.753° | 1.454° | 4.104° |
+| q_estimate | 2-vector (reference vector + magnetometer) | 0.753° | 1.454° | 4.104° |
 | q_estimate | 1-vector (magnetometer only) | 3.150° | 4.712° | 7.002° |
-| Gyro bias | 2-vector| 0.009 °/hr | 0.023 °/hr | 0.170 °/hr |
-| Gyro bias | 1-vector | 0.007 °/hr | 0.007 °/hr | 0.012 °/hr |
+| Gyro bias | 2-vector | 0.009 °/s | 0.023 °/s | 0.170 °/s |
+| Gyro bias | 1-vector | 0.007 °/s | 0.007 °/s | 0.012 °/s |
 
 ### Pointing Error
-Degrees of error away from pointing at providence, with the first 300s (settling) excluded. Mission requirment is 10 degrees.
+Degrees of error away from pointing at Providence, with the first 300 s (settling) excluded. Mission requirement is ±10°.
 
 <p align="center">
-  <img src="MATLAB/docs/pointing_error.png" width="600" alt="Pointing_error"><br>
+  <img src="MATLAB/docs/pointing_error.png" width="600" alt="Pointing error vs time: under 4° in two-vector windows, up to 9.7° in the shaded magnetometer-only windows"><br>
+  <em>Pointing error vs time; shaded windows are magnetometer-only</em>
 </p>
 
 | Mode | RMS | 3-sigma | Max |
 | --- | --- | --- | --- |
-| 2-vector (sun + magnetometer) | 0.765° | 1.231° | 3.878° |
+| 2-vector (reference vector + magnetometer) | 0.765° | 1.231° | 3.878° |
 | 1-vector (magnetometer only) | 3.579° | 6.490° | 9.745° |
 
 ### Component verification
@@ -104,7 +106,7 @@ Individual tests for each script.
 | --- | --- | --- |
 | `propagate_orbital_elements` | `propagateOrbit` / `ijk2keplerian` | 1e-8° over a 2 h arc, e in [0.05, 0.95] |
 | `magnetosphere` | `wrldmagm` | exact to 10 different common locations |
-| `pointing_error` | Aerospace Blockset nadir-pointing block | exact over 20000s orbit |
+| `pointing_error` | Aerospace Blockset nadir-pointing block | exact over a 20,000 s run |
 
 ## Running it
 
@@ -115,10 +117,10 @@ inside that model.
 
 Requires MATLAB, Simulink, Aerospace Blockset, and Aerospace Toolbox.
 
-To run the Monte Carlo study, open the file in matlab with the Simulink model open, then call
+To run the Monte Carlo study, open the file in MATLAB with the Simulink model open, then call
 
 ```matlab
-r = runCubeSatMonteCarlo(NumTrials=100, StopTime=900, SettleTolDeg=1.5);
+r = runCubeSatMonteCarlo(NumTrials=100, StopTime=300, SettleTolDeg=2);
 summary(r)
 ```
 
@@ -128,7 +130,7 @@ summary(r)
 | --- | --- |
 | [`MATLAB/Algorithms/`](MATLAB/Algorithms) | The algorithms, as standalone `.m` files |
 | [`MATLAB/Simulink/CubeSat Simulation Project-3/`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3) | The full Simulink project and model |
-| [`MATLAB/docs/`](MATLAB/docs) | Demo gif |
+| [`MATLAB/docs/`](MATLAB/docs) | Demo gif and performance plots |
 | [`C/`](C) | C port, other algorithms to be added |
 
 
@@ -146,7 +148,7 @@ WMM2025 spherical-harmonic field model. I integrated it into the Simulink contro
 
 Multiplicative unscented Kalman filter, 6-state error
 (3 attitude + 3 gyro bias), 13 sigma points, switching between a two-vector
-(sun + magnetometer) and magnetometer-only measurement mode, filter core written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes I did:
+(reference vector + magnetometer) and magnetometer-only measurement mode, filter core written by @david-man. I got it to work with the PD controller in the Simulink model. Specific fixes I did:
 
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off.
@@ -162,7 +164,7 @@ quaternion, and returns the error quaternion in body coordinates.
 
 ### PD controller — [`PD_controller.m`](MATLAB/Algorithms/PD_controller.m)
 - Converts the error quaternion and body rates to axis-angle, applies proportional and derivative gains per axis, scales by the measured inertia tensor, and saturates the commanded torque.
-- Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction and the rate normalization. Co-developed with @aPizzaRat.
+- Takes the shortest-rotation so that when the scalar of q_error is negative, it negates the quaternion and has small-angle guards on both the axis extraction and the rate normalization. Co-developed with @aPizzaRat
 
 
 ### Detumbling — [`Bdot.m`](MATLAB/Algorithms/Bdot.m)

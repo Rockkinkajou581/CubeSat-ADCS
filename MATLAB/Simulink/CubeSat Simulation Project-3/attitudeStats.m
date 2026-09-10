@@ -13,7 +13,7 @@ function stats = attitudeStats(source, opts)
 %       s = attitudeStats(simOut);
 %
 %   Gyro bias error (same maths, different signal and units):
-%       b = attitudeStats(simOut, SignalName="b_error", Units="deg/hr");
+%       b = attitudeStats(simOut, SignalName="b_error", Units="deg/s");
 %
 %   NAME-VALUE
 %     SignalName   Logged signal to read.                    ("deg_error")
