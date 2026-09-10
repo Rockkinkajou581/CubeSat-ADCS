@@ -45,7 +45,7 @@ I ran many simulations in Simulink to test the preformance of the full algorithm
 A 100 trial monte carlo simulation ran to 300 s with randommized intital angular velocity and attitude to test PD settling. 
 
 <p align="center">
-  <img src="MATALB/docs/MonteCarlo.fig" width="600" alt="Monte Carlo"><br>
+  <img src="MATALB/docs/monte_carlo.png" width="600" alt="Monte Carlo"><br>
   <em>Results from 100 trial monte carlo simulation wiht randomized initial conditions to test PD controller settling</em>
 </p>
 
