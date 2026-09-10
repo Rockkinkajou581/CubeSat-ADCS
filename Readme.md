@@ -23,6 +23,82 @@ MATLAB Satellite Scenario Viewer from Simulink model, 50x real time, tracking Pr
   <em>Sensor footprint tracking Providence, 50× real time</em>
 </p>
 
+## Performance
+I ran many simulations in Simulink to test the preformance of the full algorithm. 
+
+
+
+### Test conditions
+
+- **Orbit:** 408 km altitude (a = 6 786 233.13 m), 51.6° inclination, 7.1e-5 eccentricity
+- **Inertia:** diag(0.0301, 0.0114, 0.0231) kg·m² — the model uses the full tensor;
+  products of inertia are I_xy = −5.17e-5, I_xz = 2.51e-5, I_yz = −3.65e-3 kg·m²
+- **Sensors:** magnetometer 10 nT (1σ) on a 10 s cadence, photodiodes **not modeled**
+  (the 2-vector mode substitutes a fixed ECI reference vector `[1 0 0]` with 0.01 1σ
+  unit-vector noise), gyro 0.057 °/s noise + (0.115, −0.057, 0.086) °/s constant bias,
+  sampled at 10 Hz
+- **Actuators:** **ideal torque actuators** — the plant applies the commanded body torque
+  directly, with no magnetorquer dipole model and no saturation limit
+- **Simulation:** ___ s stop time, ___ solver at ___ s step, `Seed = 0`
+
+### Monte Carlo Validation on PD controller 
+A 100 trial monte carlo simulation ran to 300 s with randommized intital angular velocity and attitude to test PD settling. 
+
+<p align="center">
+  <img src="MATALB/docs/MonteCarlo.fig" width="600" alt="Monte Carlo"><br>
+  <em>Results from 100 trial monte carlo simulation wiht randomized initial conditions to test PD controller settling</em>
+</p>
+
+| Metric | Value |
+|---|---|
+| Settled within tolerance (2.00°) | 100/100 (100%) |
+| Settling time — mean | 53.6 s |
+| Settling time — 95th pct | 60.0 s |
+| Settling time — max | 65.0 s |
+| Steady-state error — mean | 0.5538° |
+| Steady-state error — RMS | 0.6103° |
+| Steady-state drift | -3.44×10⁻³ °/s |
+
+### Attitude accuracy from MUKF
+Error between estimated quaternion and bias and true quaternion and bias, over 6 hour run in alternating measurement mode
+
+<p align="center">
+  <img src="MATALB/docs/attitude_error.fig" width="600" alt="attitude_error"><br>
+</p>
+
+<p align="center">
+  <img src="MATALB/docs/bias_error.fig" width="600" alt="bias_error"><br>
+</p>
+
+
+| Value | Mode | RMS error | 3-sigma | max |
+| --- | --- | --- | --- |
+| q_estimate | 2-vector (sun + magnetometer) | 0.753° | 1.454° | 4.104° |
+| q_estimate | 1-vector (magnetometer only) | 3.150° | 4.712° | 7.002° |
+| Gyro bias | 2-vector| 0.009 °/hr | 0.023 °/hr | 0.170 °/hr |
+| Gyro bias | 1-vector | 0.007 °/hr | 0.007 °/hr | 0.012 °/hr |
+
+### Pointing Error
+Degree of error away from pointing at providence, with the first 300s (settling) excluded
+
+<p align="center">
+  <img src="MATALB/docs/pointing_error.fig" width="600" alt="Pointing_error"><br>
+</p>
+
+| Mode | RMS | 3-sigma | Max |
+| --- | --- | --- | --- |
+| 2-vector (sun + magnetometer) | 0.765° | 1.231° | 3.878° |
+| 1-vector (magnetometer only) | 3.579° | 6.490° | 9.745° |
+
+### Component verification
+Individual tests for each script.
+
+| Component | Checked against | Agreement |
+| --- | --- | --- |
+| `propagate_orbital_elements` | `propagateOrbit` / `ijk2keplerian` | 1e-8° over a 2 h arc, e in [0.05, 0.95] |
+| `magnetosphere` | `wrldmagm` | exact to 10 different common locations |
+| `pointing_error` | Aerospace Blockset nadir-pointing block | exact over 20000s orbit |
+
 ## Running it
 
 Open [`CubeSatSimulationProject.prj`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3/CubeSatSimulationProject.prj),
@@ -68,7 +144,7 @@ Multiplicative unscented Kalman filter, 6-state error
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off.
 - **1 vector model drift with PD** - debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller due to generated w_measured bug
-- **Verified Accuracy with PD controller** - wrote a small script [`Error.m`](MATLAB/Algorithms/Error.m) to find rotation error between q_est and q_true; tested MUKF accuracy over 2 hour orbits with 1 vector mode (magnetometer only), 2 vector, nadir vs Providence pointing, and PD controller fed w_estimate vs w_true. Ran 100 simulation Monte Carlo tests with random initial orientations and velocity to test PD settling with MUKF.
+- **Verified Accuracy with PD controller** - wrote a small script [`Error.m`](MATLAB/Algorithms/Error.m) to find rotation error between q_est and q_true (see [Performance](#performance)) for more on the testing. 
 
 ### Pointing error — [`pointing_error.m`](MATLAB/Algorithms/pointing_error.m)
 - Builds the desired body frame for a ground-station target (Providence,
