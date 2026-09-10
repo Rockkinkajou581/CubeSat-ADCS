@@ -72,7 +72,7 @@ Error between estimated quaternion and bias and true quaternion and bias, over 6
 
 
 | Value | Mode | RMS error | 3-sigma | max |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | q_estimate | 2-vector (sun + magnetometer) | 0.753° | 1.454° | 4.104° |
 | q_estimate | 1-vector (magnetometer only) | 3.150° | 4.712° | 7.002° |
 | Gyro bias | 2-vector| 0.009 °/hr | 0.023 °/hr | 0.170 °/hr |
