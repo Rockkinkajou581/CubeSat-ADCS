@@ -152,7 +152,7 @@ Multiplicative unscented Kalman filter, 6-state error
 
 - **`omega_icrf2b` 0 in Simulink** - fed in w_eci2b output from the dynamics block, changing the convention from NED and reconfigured quaternion outputs to match, to avoid quaternion finite difference inaccuracy
 - **Quaternion backwards bug** - identified and helped fix a bug in quaternions being inverted (active vs passive convention) causing w_estimate to be off.
-- **1 vector model drift with PD** - debugged an issue with 1 vec model drifting up to 30 deg of accuracy when used with PD controller due to generated w_measured bug
+- **1 vector model drift with PD** - debugged an issue with 1 vec model drifting up to 30 deg of accuracy by fixing a sigma-point constant issue ((n + lambda) was too small). 
 - **Verified Accuracy with PD controller** - wrote a small script [`Error.m`](MATLAB/Algorithms/Error.m) to find rotation error between q_est and q_true (see [Performance](#performance)) for more on the testing. 
 
 ### Pointing error — [`pointing_error.m`](MATLAB/Algorithms/pointing_error.m)
