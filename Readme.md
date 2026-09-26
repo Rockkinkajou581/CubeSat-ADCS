@@ -173,7 +173,7 @@ Implemented B-dot control law
 - Uses finite-differences in the body-frame magnetic field
 to command a magnetic dipole opposing the rate of change.
 
-## SPG4
+### SPG4
 Implemented SPG4 algorithm for fast, precise orbital propogation from Vallado's paper. Most of the algorithm was pre-written by him. Algo matches his sample orbit data and < 100m/hr of error against matlab's numerical propogation with spherical harmonics. 
 
 ### Monte Carlo verification — [`runCubeSatMonteCarlo.m`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3/runCubeSatMonteCarlo.m)
