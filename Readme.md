@@ -199,7 +199,7 @@ and has the full test suite. [`C/`](C) holds only the files I translated from MA
 | [`C/src/sgp4_*.c`](C/src), [`C/include/sgp4_*.h`](C/include) | `SPG4Init.m`, `SPG4propogate.m`, `SPG4step.m` |
 
 These files depend on shared helpers from the team repo (`quat.h`, `laextension.h`) and on
-CMSIS-DSP, so build and test them from there.
+CMSIS-DSP. 
 
 ## Simulink model
 
