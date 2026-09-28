@@ -196,7 +196,7 @@ and has the full test suite. [`C/`](C) holds only the files I translated from MA
 | [`C/propagate_orbital_elements.c`](C/propagate_orbital_elements.c) | `propagate_orbital_elements.m` (original port; became `kepler.c` in the team repo after CMSIS-DSP integration) |
 | [`C/src/pd.c`](C/src/pd.c), [`C/include/pd.h`](C/include/pd.h) | `PD_controller.m` |
 | [`C/src/down_quat.c`](C/src/down_quat.c), [`C/include/down_quat.h`](C/include/down_quat.h) | `pointing_error.m` |
-| [`C/src/sgp4_*.c`](C/src), [`C/include/sgp4_*.h`](C/include) | `SPG4Init.m`, `SPG4propogate.m`, `SPG4step.m` |
+| [`C/src/sgp4_*.c`](C/src), [`C/include/sgp4_*.h`](C/include) | `sgp4Init.m`, `sgp4Propagate.m`, `sgp4Step.m` |
 
 These files depend on shared helpers from the team repo (`quat.h`, `laextension.h`) and on
 CMSIS-DSP. 
