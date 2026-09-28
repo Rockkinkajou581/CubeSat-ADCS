@@ -131,7 +131,7 @@ summary(r)
 | [`MATLAB/Algorithms/`](MATLAB/Algorithms) | The algorithms, as standalone `.m` files |
 | [`MATLAB/Simulink/CubeSat Simulation Project-3/`](MATLAB/Simulink/CubeSat%20Simulation%20Project-3) | The full Simulink project and model |
 | [`MATLAB/docs/`](MATLAB/docs) | Demo gif and performance plots |
-| [`C/`](C) | C port, other algorithms to be added |
+| [`C/`](C) | My C translations for flight software (see [C port](#c-port)) |
 
 
 ## What I did / Explanation
@@ -183,6 +183,23 @@ axis-angle with tilt bounds), rate range, settling tolerance, steady-state
 window, and RNG seed; returns one row per trial and plots the summary.
 Initial conditions are injected with `Simulink.SimulationInput`, so the model on
 disk is never modified. Wrote with Claude. 
+
+## C port
+
+The flight software lives in the team repo,
+[BrownSpaceEngineering/adcs-unix-testing](https://github.com/BrownSpaceEngineering/adcs-unix-testing),
+which builds with CMake against ARM's [CMSIS-DSP](https://github.com/ARM-software/CMSIS-DSP)
+and has the full test suite. [`C/`](C) holds only the files I translated from MATLAB:
+
+| File | MATLAB source |
+| --- | --- |
+| [`C/propagate_orbital_elements.c`](C/propagate_orbital_elements.c) | `propagate_orbital_elements.m` (original port; became `kepler.c` in the team repo after CMSIS-DSP integration) |
+| [`C/src/pd.c`](C/src/pd.c), [`C/include/pd.h`](C/include/pd.h) | `PD_controller.m` |
+| [`C/src/down_quat.c`](C/src/down_quat.c), [`C/include/down_quat.h`](C/include/down_quat.h) | `pointing_error.m` |
+| [`C/src/sgp4_*.c`](C/src), [`C/include/sgp4_*.h`](C/include) | `SPG4Init.m`, `SPG4propogate.m`, `SPG4step.m` |
+
+These files depend on shared helpers from the team repo (`quat.h`, `laextension.h`) and on
+CMSIS-DSP, so build and test them from there.
 
 ## Simulink model
 
