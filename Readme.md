@@ -2,11 +2,11 @@
 My work on the attitude determination and control system for PVDX, Brown Space
 Engineering's CubeSat. 
 
-This is not the flight repository. Development happens upstream at: https://github.com/BrownSpaceEngineering/PVDX-ADCS and per-file authorship is noted under [What I did](#what-i-did--explanation).
+The upstream repo is: https://github.com/BrownSpaceEngineering/PVDX-ADCS and per-file authorship is noted under [What I did](#what-i-did--explanation).
 
 ## Signal chain
 
-NASA returns the orbital elements of the satellite. These are propagated to find ECI position. The magnetosphere finds the reference magnetic field at the satellite's ECI position. This is fed into the MUKF along with photodiode and magnetometer measurements. The returning estimated quaternion and omega are fed into pointing_error to find the desired quaternion, which is then fed into the PD controller to command a torque.
+The U.S military returns the orbital elements of the satellite. These are propagated to find ECI position. The magnetosphere finds the reference magnetic field at the satellite's ECI position. This is fed into the MUKF along with photodiode and magnetometer measurements. The returning estimated quaternion and omega are fed into pointing_error to find the desired quaternion, which is then fed into the PD controller to command a torque.
 
 `propagate_orbital_elements` → `magnetosphere` → `MUKF` → `pointing_error` →
 `PD_controller`
